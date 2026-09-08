@@ -14,12 +14,7 @@ export default function Landing() {
     }}>
       {/* Logo */}
       <div style={{ display: 'flex', alignItems: 'center', gap: 14, marginBottom: 48 }}>
-        <div style={{ width: 52, height: 52, background: C.primary, borderRadius: 14, display: 'flex', alignItems: 'center', justifyContent: 'center', color: C.gold }}>
-          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            <polyline points="1 4 1 10 7 10"/><polyline points="23 20 23 14 17 14"/>
-            <path d="M20.49 9A9 9 0 0 0 5.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 0 1 3.51 15"/>
-          </svg>
-        </div>
+        <img src="/logo.png" alt="Punahachakra Logo" style={{ width: 52, height: 52, borderRadius: 14, objectFit: 'cover' }} />
         <div>
           <div style={{ fontSize: 26, fontWeight: 800, color: C.darkText, lineHeight: 1.1 }}>Punahachakra</div>
           <div style={{ fontSize: 14, color: C.muted, fontWeight: 500 }}>Trusted Digital Marketplace for Verified Kabadiwalas</div>

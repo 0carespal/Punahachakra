@@ -376,7 +376,10 @@ function PaymentScreen({ offerSent, onPaid }: { offerSent: boolean; onPaid: () =
   const [method, setMethod] = useState<'upi' | 'card' | 'bank'>('upi');
   const [processing, setProcessing] = useState(false);
   const [receipt, setReceipt] = useState(false);
-  const [upiId, setUpiId] = useState('aryan@sbi');
+  const [upiId, setUpiId] = useState('');
+  const [cardNumber, setCardNumber] = useState('');
+  const [expiry, setExpiry] = useState('');
+  const [cvv, setCvv] = useState('');
 
   const handlePay = () => {
     setProcessing(true);
@@ -456,14 +459,14 @@ function PaymentScreen({ offerSent, onPaid }: { offerSent: boolean; onPaid: () =
           {method === 'upi' && (
             <div style={{ display: 'flex', gap: 10, alignItems: 'center' }}>
               <span style={{ fontSize: 13, color: C.muted, flexShrink: 0 }}>UPI ID:</span>
-              <input value={upiId} onChange={e => setUpiId(e.target.value)} style={{ ...inputStyle, flex: 1, fontFamily: 'monospace' }} />
+              <input value={upiId} onChange={e => setUpiId(e.target.value)} placeholder="username@upi" style={{ ...inputStyle, flex: 1, fontFamily: 'monospace' }} />
             </div>
           )}
           {method === 'card' && (
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
-              <FormField label="Card Number"><input style={{ ...inputStyle, gridColumn: '1/-1', fontFamily: 'monospace' }} defaultValue="4242 4242 4242 4242" /></FormField>
-              <FormField label="Expiry"><input style={inputStyle} defaultValue="12/28" /></FormField>
-              <FormField label="CVV"><input type="password" inputMode="numeric" maxLength={4} style={inputStyle} placeholder="•••" /></FormField>
+              <FormField label="Card Number"><input value={cardNumber} onChange={e => setCardNumber(e.target.value)} placeholder="•••• •••• •••• ••••" style={{ ...inputStyle, gridColumn: '1/-1', fontFamily: 'monospace' }} /></FormField>
+              <FormField label="Expiry"><input value={expiry} onChange={e => setExpiry(e.target.value)} placeholder="MM/YY" style={inputStyle} /></FormField>
+              <FormField label="CVV"><input type="password" inputMode="numeric" maxLength={4} value={cvv} onChange={e => setCvv(e.target.value)} style={inputStyle} placeholder="•••" /></FormField>
             </div>
           )}
           {method === 'bank' && (

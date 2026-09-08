@@ -46,9 +46,7 @@ export function Shell({ role, navItems, activeKey, onNav, avatarInitials, avatar
         {/* Logo */}
         <div style={{ padding: '24px 20px 20px', borderBottom: `1px solid rgba(255,255,255,0.1)` }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-            <div style={{ width: 34, height: 34, background: C.gold, borderRadius: 8, display: 'flex', alignItems: 'center', justifyContent: 'center', color: C.deepGreen }}>
-              <Icon.recycle />
-            </div>
+            <img src="/logo.png" alt="Punahachakra Logo" style={{ width: 34, height: 34, borderRadius: 8, objectFit: 'cover' }} />
             <div>
               <div style={{ fontSize: 15, fontWeight: 800, color: C.white, lineHeight: 1.1 }}>Punahachakra</div>
               <div style={{ fontSize: 11, color: C.gold, fontWeight: 700, letterSpacing: '0.04em', textTransform: 'uppercase' }}>

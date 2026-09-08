@@ -62,11 +62,11 @@ export function Badge({ children, variant = 'default' }: { children: React.React
 }
 
 // ─── Primary button ─────────────────────────────────────────────────────────
-export function PrimaryBtn({ children, onClick, disabled, loading, style }: {
-  children: React.ReactNode; onClick?: () => void; disabled?: boolean; loading?: boolean; style?: React.CSSProperties;
+export function PrimaryBtn({ children, onClick, disabled, loading, style, type = 'submit' }: {
+  children: React.ReactNode; onClick?: () => void; disabled?: boolean; loading?: boolean; style?: React.CSSProperties; type?: 'button' | 'submit' | 'reset';
 }) {
   return (
-    <button onClick={onClick} disabled={disabled || loading} style={{
+    <button type={type} onClick={onClick} disabled={disabled || loading} style={{
       display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: 8,
       background: disabled ? C.border : C.primary, color: C.white,
       padding: '11px 24px', borderRadius: 9, fontWeight: 700, fontSize: 14,

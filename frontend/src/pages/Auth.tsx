@@ -22,24 +22,25 @@ function validate(name: string, value: string): string {
     case 'email':
       return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value) ? '' : 'Enter a valid email address';
     case 'pan':
-      return /^[A-Z]{5}[0-9]{4}[A-Z]$/.test(value.toUpperCase()) ? '' : 'Format: ABCDE1234F';
+      return !value ? '' : /^[A-Z]{5}[0-9]{4}[A-Z]$/.test(value.toUpperCase()) ? '' : 'Format: ABCDE1234F';
     case 'aadhaar':
-      return /^\d{12}$/.test(value) ? '' : 'Aadhaar must be exactly 12 digits';
+      return !value ? '' : /^\d{12}$/.test(value) ? '' : 'Aadhaar must be exactly 12 digits';
     case 'gstin':
-      return /^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z][1-9A-Z]Z[0-9A-Z]$/.test(value.toUpperCase())
+      return !value ? '' : /^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z][1-9A-Z]Z[0-9A-Z]$/.test(value.toUpperCase())
         ? '' : '15-character GST format (e.g. 08ABCDE1234F1Z5)';
     case 'ifsc':
-      return /^[A-Z]{4}0[A-Z0-9]{6}$/.test(value.toUpperCase()) ? '' : 'Format: ABCD0123456';
+      return !value ? '' : /^[A-Z]{4}0[A-Z0-9]{6}$/.test(value.toUpperCase()) ? '' : 'Format: ABCD0123456';
     case 'bankAccount':
-      return /^\d{9,18}$/.test(value) ? '' : 'Enter a valid account number';
+      return !value ? '' : /^\d{9,18}$/.test(value) ? '' : 'Enter a valid account number';
     case 'password':
       return value.length >= 8 ? '' : 'Password must be at least 8 characters';
     case 'confirmPassword':
       return ''; // handled separately
     case 'fullName':
     case 'companyName':
-    case 'accountHolderName':
       return value.trim().length >= 2 ? '' : 'This field is required';
+    case 'accountHolderName':
+      return !value ? '' : value.trim().length >= 2 ? '' : 'Must be at least 2 characters';
     default:
       return '';
   }
@@ -230,29 +231,40 @@ function KabadiwalaSignup({ onSwitch, onSuccess }: { onSwitch: () => void; onSuc
     const allTouched = Object.fromEntries(keys.map(k => [k, true]));
     setTouched(allTouched);
     setApiError(null);
-    const hasErrors = keys.some(k => validate(k, f[k])) || f.confirm !== f.password || !authorized;
 
-    if (!hasErrors) {
-      setLoading(true);
-      try {
-        const email = `${f.phone}@kabadiwala.com`;
-        await register({
-          email,
-          password: f.password,
-          role: 'KABADIWALA',
-          full_name: f.fullName,
-          location: 'Jaipur, Rajasthan',
-        });
-        await login({ email, password: f.password });
-        addToast('Kabadiwala account registered successfully!', 'success');
-        onSuccess();
-      } catch (err: any) {
-        const msg = err.message || 'Registration failed. Please check your information.';
-        setApiError(msg);
-        addToast(msg, 'error');
-      } finally {
-        setLoading(false);
+    const validationFailed = keys.some(k => validate(k, f[k]));
+    const passwordsMismatch = f.confirm !== f.password;
+
+    if (validationFailed || passwordsMismatch || !authorized) {
+      if (passwordsMismatch) {
+        setApiError("Passwords don't match.");
+      } else if (!authorized) {
+        setApiError("You must authorize verification to continue.");
+      } else {
+        setApiError("Please fill in all required fields accurately.");
       }
+      return;
+    }
+
+    setLoading(true);
+    try {
+      const email = `${f.phone}@kabadiwala.com`;
+      await register({
+        email,
+        password: f.password,
+        role: 'KABADIWALA',
+        full_name: f.fullName,
+        location: 'Jaipur, Rajasthan',
+      });
+      await login({ email, password: f.password });
+      addToast('Kabadiwala account registered successfully!', 'success');
+      onSuccess();
+    } catch (err: any) {
+      const msg = err.message || 'Registration failed. Please check your information.';
+      setApiError(msg);
+      addToast(msg, 'error');
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -565,12 +577,7 @@ export default function Auth() {
 
       {/* Logo */}
       <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 28 }}>
-        <div style={{ width: 40, height: 40, background: C.deepGreen, borderRadius: 10, display: 'flex', alignItems: 'center', justifyContent: 'center', color: C.gold }}>
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            <polyline points="1 4 1 10 7 10"/><polyline points="23 20 23 14 17 14"/>
-            <path d="M20.49 9A9 9 0 0 0 5.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 0 1 3.51 15"/>
-          </svg>
-        </div>
+        <img src="/logo.png" alt="Punahachakra Logo" style={{ width: 40, height: 40, borderRadius: 10, objectFit: 'cover' }} />
         <div style={{ fontSize: 20, fontWeight: 800, color: C.darkText }}>Punahachakra</div>
       </div>
 
