@@ -1,0 +1,10 @@
+{
+  "description": "Automates task execution by following detailed prompts line by line, streamlining workflows for professionals seeking precise, efficient results.",
+  "robots": {
+    "index": false
+  },
+  "accessibility": {
+    "addBypassLinks": false,
+    "ignoreReducedMotion": false
+  }
+}
